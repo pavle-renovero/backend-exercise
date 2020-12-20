@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '2.0.0.M3'
+        springBootVersion = '2.1.0.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -32,7 +32,8 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: 'nu.studer.jooq'
 
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = 14
+sourceCompatibility = 11
+targetCompatibility = 11
 
 dependencies {
     compile('org.springframework.boot:spring-boot-starter-web')
@@ -43,18 +44,18 @@ dependencies {
     jooqRuntime group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '2.3.1'
     jooqRuntime group: 'com.sun.activation', name: 'javax.activation', version: '1.2.0'
     testCompile('org.springframework.boot:spring-boot-starter-test')
-    testCompile "io.rest-assured:rest-assured:3.0.3"
+    testCompile("io.rest-assured:rest-assured:3.2.0")
 }
 
 bootJar {
-    mainClass = "com.exercise.BootApplication"
+    mainClassName = "com.exercise.BootApplication"
 }
 
 jooq {
     db(sourceSets.main) {
         jdbc {
             driver = 'org.h2.Driver'
-            url = "jdbc:h2:file:$project.projectDir/db"
+            url = "jdbc:h2:file:$project.projectDir/data/db"
             user = 'sa'
             password = ''
         }
@@ -79,11 +80,11 @@ jooq {
 }
 
 flyway {
-    url = "jdbc:h2:file:$project.projectDir/db"
+    url = "jdbc:h2:file:$project.projectDir/data/db"
     user = 'sa'
     password = ''
-    schemas = ['public']
-    defaultSchema = 'public'
+    schemas = ['renovero']
+    defaultSchema = 'renovero'
     locations = ["filesystem:$project.projectDir/src/main/resources/db/migration"]
 }
 
