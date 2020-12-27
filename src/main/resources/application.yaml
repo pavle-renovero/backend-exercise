@@ -16,3 +16,8 @@ spring:
     schemas: renovero
     locations:
       - filesystem:src/main/resources/db/migration
+
+median:
+  scheduler:
+    rate: 3600000
+    delay: 3600000

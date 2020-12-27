@@ -40,11 +40,17 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-jooq')
     compile "org.jooq:jooq"
     compile "com.h2database:h2"
+    compileOnly 'org.projectlombok:lombok:1.18.16'
+    annotationProcessor 'org.projectlombok:lombok:1.18.16'
     jooqRuntime "com.h2database:h2"
     jooqRuntime group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '2.3.3'
     jooqRuntime group: 'com.sun.activation', name: 'javax.activation', version: '1.2.0'
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile("io.rest-assured:rest-assured:3.2.0")
+    testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '2.0.9'
+    testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.9'
+
+
 }
 
 bootJar {
@@ -91,6 +97,11 @@ flyway {
 task cleanDb() {
     delete 'data'
 }
+
+generateDbJooqSchemaSource.inputs.files(project.fileTree('src/main/resources/db/migration'))
+        .withPropertyName("migrations")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+generateDbJooqSchemaSource.outputs.cacheIf { true }
 
 generateDbJooqSchemaSource.dependsOn cleanDb
 generateDbJooqSchemaSource.dependsOn flywayMigrate
